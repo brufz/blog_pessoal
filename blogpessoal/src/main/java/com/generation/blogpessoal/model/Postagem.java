@@ -1,19 +1,22 @@
 package com.generation.blogpessoal.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
-@Table(name = "postagem")
+@Table(name = "tb_postagem")
 public class Postagem {
 	
 	@Id
@@ -28,8 +31,15 @@ public class Postagem {
 	@Size(min = 10, max = 500)
 	private String texto;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date data = new  java.sql.Date(System.currentTimeMillis());
+	//@UpdateTimestamp -> pega a data e hora automáticamente
+	@UpdateTimestamp
+	private LocalDateTime data;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("postagem")
+	private Temas tema;
+
+	
 
 	public long getId() {
 		return id;
@@ -55,13 +65,22 @@ public class Postagem {
 		this.texto = texto;
 	}
 
-	public Date getData() {
+	public LocalDateTime getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(LocalDateTime data) {
 		this.data = data;
 	}
+
+	public Temas getTema() {
+		return tema;
+	}
+
+	public void setTema(Temas tema) {
+		this.tema = tema;
+	}
+	
 	
 	
 
